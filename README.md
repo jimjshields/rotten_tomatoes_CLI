@@ -1,2 +1,2 @@
-# rotten_tomatoes_cli
+# Rotten Tomatoes CLI
 A simple command line interface for the Rotten Tomatoes API.
