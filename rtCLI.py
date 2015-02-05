@@ -89,48 +89,65 @@ class InTheatersRequest(APIRequest):
 	"""Represents an in theaters request object."""
 
 	def __init__(self, page_limit=16, page=1, country='us'):
-		"""Initializes an 'in theaters' request with a given page limit,
-		   page, and country.
+		"""Initializes an 'in theaters' request with a given page limit, page, and country.
 		   Defaults to 16, 1, and the US - RT defaults."""
 
 		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/in_theaters.json?page_limit=%s&page=%s&country=%s' % (page_limit, page, country))
 
-# searching = True
-# while searching:
-# 	search_query = raw_input("What do you want to search for? ")
-# 	s = SearchRequest(search_query)
-# 	search_results = s.make_request()
+class OpeningMoviesRequest(APIRequest):
+	"""Represents an opening movies request object."""
 
-# 	movies = [(i['title'], i['ratings']['critics_score'], i['links']['reviews'], i['year']) for i in search_results['movies'] if i['ratings']['critics_score'] != -1]
-# 	sorted_by_rating = sorted(movies, key=lambda tup: tup[1], reverse=True)
-# 	sorted_by_year = sorted(movies, key=lambda tup: tup[3], reverse=True)
-# 	for i, movie in enumerate(sorted_by_year):
-# 		if movie[1] != -1:
-# 			if movie[1] < 60:
-# 				print term.red('%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3]))
-# 			else:
-# 				print term.green('%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3]))
+	def __init__(self, limit=16, country='us'):
+		"""Initializes an 'opening movies' request with a given movie limit and country.
+		   Defaults to 16 and the US - RT defaults."""
+
+		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/opening.json?limit=%s&country=%s' % (limit, country))
+
+class UpcomingMoviesRequest(APIRequest):
+	"""Represents an opening movies request object."""
+
+	def __init__(self, page_limit=16, page=1, country='us'):
+		"""Initializes an 'upcoming movies' request with a given page limit, page, and country.
+		   Defaults to 16, 1, and the US - RT defaults."""
+
+		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/upcoming.json?page_limit=%s&page=%s&country=%s' % (page_limit, page, country))
+
+searching = True
+while searching:
+	search_query = raw_input("What do you want to search for? ")
+	s = SearchRequest(search_query)
+	search_results = s.make_request()
+
+	movies = [(i['title'], i['ratings']['critics_score'], i['links']['reviews'], i['year']) for i in search_results['movies'] if i['ratings']['critics_score'] != -1]
+	sorted_by_rating = sorted(movies, key=lambda tup: tup[1], reverse=True)
+	sorted_by_year = sorted(movies, key=lambda tup: tup[3], reverse=True)
+	for i, movie in enumerate(sorted_by_year):
+		if movie[1] != -1:
+			if movie[1] < 60:
+				print term.red('%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3]))
+			else:
+				print term.green('%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3]))
 
 
-# 	search_choice = int(raw_input('Do you want to keep searching (1) or more info (2)? '))
-# 	if search_choice == 2:
-# 		searching = False
+	search_choice = int(raw_input('Do you want to keep searching (1) or more info (2)? '))
+	if search_choice == 2:
+		searching = False
 
-# selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
-# reviews_results = ReviewsRequest(sorted_by_year[selected_movie][2]).make_request()
-# reviews_dict = [k for k in reviews_results['reviews']]
+selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
+reviews_results = ReviewsRequest(sorted_by_year[selected_movie][2]).make_request()
+reviews_dict = [k for k in reviews_results['reviews']]
 
-# print divider('-')
-# for review in reviews_dict:
-# 	review_text = center_text(review['date']) + '\n'
-# 	review_text += center_text(review['critic'] + ' - ' + review['publication']) + '\n'
-# 	review_text += center_text(review['quote']) + '\n'
-# 	if review['links']:
-# 		review_text += center_text(review['links']['review'])
+print divider('-')
+for review in reviews_dict:
+	review_text = center_text(review['date']) + '\n'
+	review_text += center_text(review['critic'] + ' - ' + review['publication']) + '\n'
+	review_text += center_text(review['quote']) + '\n'
+	if review['links']:
+		review_text += center_text(review['links']['review'])
 
-# 	if review['freshness'] == 'fresh':
-# 		print term.green(review_text)
-# 	else:
-# 		print term.red(review_text)
+	if review['freshness'] == 'fresh':
+		print term.green(review_text)
+	else:
+		print term.red(review_text)
 
-# 	print divider('-')
+	print divider('-')
