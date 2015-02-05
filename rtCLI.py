@@ -50,6 +50,14 @@ class SearchRequest(APIRequest):
 		self.endpoint = 'http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zyduzhcjdgzkzc3dmas2uph6&q=%s'\
 						% (self.query)
 
+class ReviewsRequest(APIRequest):
+	"""Represents a reviews request."""
+
+	def __init__(self, reviews_endpoint):
+		"""Initializes the search request with a given query."""
+
+		self.endpoint = '%s?apikey=zyduzhcjdgzkzc3dmas2uph6&q' % (reviews_endpoint)
+
 searching = True
 while searching:
 	search_query = raw_input("What do you want to search for? ")
@@ -72,7 +80,7 @@ while searching:
 		searching = False
 
 selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
-reviews_results = requests.get('%s?apikey=zyduzhcjdgzkzc3dmas2uph6' % (sorted_by_year[selected_movie][2])).json()
+reviews_results = ReviewsRequest(sorted_by_year[selected_movie][2]).make_request()
 reviews_dict = [k for k in reviews_results['reviews']]
 
 print divider('-')
