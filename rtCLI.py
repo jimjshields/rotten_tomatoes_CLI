@@ -25,11 +25,36 @@ def divider(char):
 	width = term.width
 	return char * width
 
+class APIRequest(object):
+	"""Represents a request to the Rotten Tomatoes API."""
+
+	def __init__(self):
+		"""Initializes the request with an empty endpoint to be filled in by
+		   specific request types."""
+		
+		self.endpoint = ''
+
+	def make_request(self):
+		"""Makes a request to a given endpoint and returns a parsed JSON."""
+
+		results = requests.get(self.endpoint).json()
+		return results
+
+class SearchRequest(APIRequest):
+	"""Represents a search request."""
+
+	def __init__(self, query):
+		"""Initializes the search request with a given query."""
+
+		self.query = query.replace(' ', '+')
+		self.endpoint = 'http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zyduzhcjdgzkzc3dmas2uph6&q=%s'\
+						% (self.query)
+
 searching = True
 while searching:
 	search_query = raw_input("What do you want to search for? ")
-	search_query.replace(' ', '+')
-	search_results = requests.get('http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zyduzhcjdgzkzc3dmas2uph6&q=%s' % (search_query)).json()
+	s = SearchRequest(search_query)
+	search_results = s.make_request()
 
 	movies = [(i['title'], i['ratings']['critics_score'], i['links']['reviews'], i['year']) for i in search_results['movies'] if i['ratings']['critics_score'] != -1]
 	sorted_by_rating = sorted(movies, key=lambda tup: tup[1], reverse=True)
