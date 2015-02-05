@@ -81,9 +81,19 @@ class BoxOfficeRequest(APIRequest):
 
 	def __init__(self, limit=16, country='us'):
 		"""Initializes a box office request with a given limit and country.
-		   Defaults to 16 and the US."""
+		   Defaults to 16 and the US - RT defaults."""
 
 		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/box_office.json?limit=%s&country=%s' % (limit, country))
+
+class InTheatersRequest(APIRequest):
+	"""Represents an in theaters request object."""
+
+	def __init__(self, page_limit=16, page=1, country='us'):
+		"""Initializes an 'in theaters' request with a given page limit,
+		   page, and country.
+		   Defaults to 16, 1, and the US - RT defaults."""
+
+		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/in_theaters.json?page_limit=%s&page=%s&country=%s' % (page_limit, page, country))
 
 # searching = True
 # while searching:
