@@ -1,5 +1,21 @@
 import requests, json
 import sys
+from blessings import Terminal
+
+term = Terminal()
+
+def center_text(string):
+	"""Centers a string on a given terminal window."""
+
+	width = term.width
+	padding =  ((width - len(string)) / 2) * ' '
+	return padding + string + padding
+
+def divider(char):
+	"""Returns a divider the width of the given terminal."""
+
+	width = term.width
+	return char * width
 
 searching = True
 while searching:
@@ -19,10 +35,18 @@ while searching:
 selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
 reviews_results = requests.get('%s?apikey=zyduzhcjdgzkzc3dmas2uph6' % (sorted_by_rating[selected_movie][2])).json()
 reviews_dict = [k for k in reviews_results['reviews']]
+
+print divider('-')
 for review in reviews_dict:
-	print 100 * '-'
-	print review['date']
-	print '%s - %s' % (review['critic'], review['publication'])
-	print review['quote']
+	review_text = center_text(review['date']) + '\n'
+	review_text += center_text(review['critic'] + ' - ' + review['publication']) + '\n'
+	review_text += center_text(review['quote']) + '\n'
 	if review['links']:
-		print review['links']['review']
+		review_text += center_text(review['links']['review'])
+
+	if review['freshness'] == 'fresh':
+		print term.green(review_text)
+	else:
+		print term.red(review_text)
+
+	print divider('-')
