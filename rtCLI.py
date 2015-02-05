@@ -8,6 +8,14 @@ def center_text(string):
 	"""Centers a string on a given terminal window."""
 
 	width = term.width
+	if len(string) > width:
+		first_line = string[:width]
+		second_line = string[width:]
+		padding = ((width - len(second_line)) / 2) * ' '
+		second_line = padding + second_line + padding
+
+		return first_line + '\n' + second_line
+
 	padding =  ((width - len(string)) / 2) * ' '
 	return padding + string + padding
 
@@ -23,17 +31,23 @@ while searching:
 	search_query.replace(' ', '+')
 	search_results = requests.get('http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zyduzhcjdgzkzc3dmas2uph6&q=%s' % (search_query)).json()
 
-	movies = [(i['title'], i['ratings']['critics_score'], i['links']['reviews'], i['year']) for i in search_results['movies']]
+	movies = [(i['title'], i['ratings']['critics_score'], i['links']['reviews'], i['year']) for i in search_results['movies'] if i['ratings']['critics_score'] != -1]
 	sorted_by_rating = sorted(movies, key=lambda tup: tup[1], reverse=True)
-	for i, movie in enumerate(sorted_by_rating):
-		print '%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3])
+	sorted_by_year = sorted(movies, key=lambda tup: tup[3], reverse=True)
+	for i, movie in enumerate(sorted_by_year):
+		if movie[1] != -1:
+			if movie[1] < 60:
+				print term.red('%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3]))
+			else:
+				print term.green('%s. %s: %s (%s)' % (i + 1, movie[0], movie[1], movie[3]))
+
 
 	search_choice = int(raw_input('Do you want to keep searching (1) or more info (2)? '))
 	if search_choice == 2:
 		searching = False
 
 selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
-reviews_results = requests.get('%s?apikey=zyduzhcjdgzkzc3dmas2uph6' % (sorted_by_rating[selected_movie][2])).json()
+reviews_results = requests.get('%s?apikey=zyduzhcjdgzkzc3dmas2uph6' % (sorted_by_year[selected_movie][2])).json()
 reviews_dict = [k for k in reviews_results['reviews']]
 
 print divider('-')
