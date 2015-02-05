@@ -71,10 +71,13 @@ class SearchRequest(APIRequest):
 class ReviewsRequest(APIRequest):
 	"""Represents a reviews request object."""
 
-	def __init__(self, search_endpoint):
+	def __init__(self, movie_id='', review_type='', page_limit='', page='', country='', search_endpoint=''):
 		"""Initializes the search request with a given query."""
 
-		self.endpoint = self.make_endpoint(full_endpoint=search_endpoint)
+		if search_endpoint:
+			self.endpoint = self.make_endpoint(full_endpoint=search_endpoint)
+		else:
+			self.endpoint = self.make_endpoint('movies/%s/reviews.json?review_type=%s&page_limit=%s&page=%s&country=%s' % (movie_id, review_type, page_limit, page, country))
 
 class BoxOfficeRequest(APIRequest):
 	"""Represents a box office request object."""
