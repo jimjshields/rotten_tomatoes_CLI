@@ -71,17 +71,17 @@ class SearchRequest(APIRequest):
 class ReviewsRequest(APIRequest):
 	"""Represents a reviews request object."""
 
-	def __init__(self, reviews_endpoint):
+	def __init__(self, search_endpoint):
 		"""Initializes the search request with a given query."""
 
-		self.endpoint = self.make_endpoint(full_endpoint=reviews_endpoint)
+		self.endpoint = self.make_endpoint(full_endpoint=search_endpoint)
 
 class BoxOfficeRequest(APIRequest):
 	"""Represents a box office request object."""
 
 	def __init__(self, limit=16, country='us'):
 		"""Initializes a box office request with a given limit and country.
-		   Defaults to 16 and the US - RT defaults."""
+		   Defaults to RT defaults."""
 
 		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/box_office.json?limit=%s&country=%s' % (limit, country))
 
@@ -90,7 +90,7 @@ class InTheatersRequest(APIRequest):
 
 	def __init__(self, page_limit=16, page=1, country='us'):
 		"""Initializes an 'in theaters' request with a given page limit, page, and country.
-		   Defaults to 16, 1, and the US - RT defaults."""
+		   Defaults to RT defaults."""
 
 		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/in_theaters.json?page_limit=%s&page=%s&country=%s' % (page_limit, page, country))
 
@@ -99,7 +99,7 @@ class OpeningMoviesRequest(APIRequest):
 
 	def __init__(self, limit=16, country='us'):
 		"""Initializes an 'opening movies' request with a given movie limit and country.
-		   Defaults to 16 and the US - RT defaults."""
+		   Defaults to RT defaults."""
 
 		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/opening.json?limit=%s&country=%s' % (limit, country))
 
@@ -108,9 +108,21 @@ class UpcomingMoviesRequest(APIRequest):
 
 	def __init__(self, page_limit=16, page=1, country='us'):
 		"""Initializes an 'upcoming movies' request with a given page limit, page, and country.
-		   Defaults to 16, 1, and the US - RT defaults."""
+		   Defaults to RT defaults."""
 
 		self.endpoint = self.make_endpoint(endpoint_str='lists/movies/upcoming.json?page_limit=%s&page=%s&country=%s' % (page_limit, page, country))
+
+class SimilarMoviesRequest(APIRequest):
+	"""Represents a similar movies request object."""
+
+	def __init__(self, movie_id='', limit=5, search_endpoint=''):
+		"""Initializes a 'similar movies' request with a given movie id and limit.
+		   Or uses an endpoint given by a movie search."""
+
+		if search_endpoint:
+			self.endpoint = self.make_endpoint(full_endpoint=search_endpoint)
+		else:
+			self.endpoint = self.make_endpoint(endpoint_str='movies/%s/similar.json?limit=%s' % (movie_id, limit))
 
 searching = True
 while searching:
