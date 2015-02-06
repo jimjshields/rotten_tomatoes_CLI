@@ -18,7 +18,7 @@ class APIRequest(object):
 		   If given the full endpoint (e.g., when getting a set of reviews
 		   for a movie directly from the API), you can pass the full endpoint."""
 		
-		api_key = 'zyduzhcjdgzkzc3dmas2uph6'
+		api_key = ''
 
 		if full_endpoint:
 			return '%s?&apikey=%s' % (full_endpoint, api_key)
