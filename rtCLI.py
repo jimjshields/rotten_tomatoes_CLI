@@ -1,7 +1,7 @@
 # import requests, json
 import sys
 from blessings import Terminal
-from classes import SearchRequest, ReviewsRequest, BoxOfficeRequest
+from classes import SearchRequest, ReviewsRequest, BoxOfficeRequest, InTheatersRequest
 from formatting import center_text, divider
 
 term = Terminal()
@@ -72,13 +72,30 @@ def get_box_office():
 			print term.red(movie_text)
 		print divider('-', term)
 
+def get_in_theaters():
+	"""Returns the in theaters data in a nice format."""
+
+	in_theaters_data = InTheatersRequest(page_limit=20).make_request()
+	print divider('-', term)
+	for movie in in_theaters_data['movies']:
+		movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+		movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
+		movie_text += center_text('Synopsis', term)
+		movie_text += center_text(movie['synopsis'], term)
+		
+		if movie['ratings']['critics_score'] >= 60:
+			print term.green(movie_text)
+		else:
+			print term.red(movie_text)
+		print divider('-', term)
+
 
 
 
 menu_functions = {
 	1: movie_search,
 	2: get_box_office,
-	# 3: get_in_theaters,
+	3: get_in_theaters,
 	# 4: get_opening,
 	# 5: get_upcoming
 }
