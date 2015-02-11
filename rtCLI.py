@@ -2,8 +2,6 @@ from blessings import Terminal
 from formatting import center_text, divider
 from menu_actions import MenuAction, term
 
-menu_items = ['Search for a Movie', 'Box Office', 'In Theaters', 'Opening', 'Upcoming', 'Exit']
-
 MENU_ACTION_NAMES = {
 	1: ('Search for a Movie', MenuAction().movie_search),
 	2: ('Box Office', MenuAction().get_box_office),
