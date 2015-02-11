@@ -1,5 +1,4 @@
-from blessings import Terminal
-from formatting import center_text, divider
+from formatting import divider
 from menu_actions import MenuAction, term
 
 MENU_ACTION_NAMES = {
