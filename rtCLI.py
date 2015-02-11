@@ -7,127 +7,132 @@ term = Terminal()
 
 menu_items = ['Search for a Movie', 'Box Office', 'In Theaters', 'Opening', 'Upcoming', 'Exit']
 
-def movie_search():
-	"""Searches for a movie."""
+class MenuAction(object):
 
-	searching = True
+	def __init__(self):
+		"""Initializes a menu action object that can be acted upon."""
 
-	while searching:
-		search_query = raw_input("What do you want to search for? ")
-		search_results = SearchRequest(search_query).make_request()
+	def movie_search(self):
+		"""Searches for a movie."""
 
-		print divider('-', term)
-		print term.blue_bold('Search Results (By Relevance):')
+		searching = True
 
-		movies = [i for i in search_results['movies'] if i['ratings']['critics_score'] != -1]
-		# sorted_by_year = sorted(movies, key=lambda dic: dic['year'], reverse=True)
-
-		for i, movie in enumerate(movies):
-			if movie['ratings']['critics_score'] < 60:
-				print term.red('%s. %s: %s%% (%s)' % (i + 1, movie['title'], movie['ratings']['critics_score'], movie['year']))
-			else:
-				print term.green('%s. %s: %s%% (%s)' % (i + 1, movie['title'], movie['ratings']['critics_score'], movie['year']))
-
-		search_choice = int(raw_input('Do you want to keep searching (1), get more info on a movie (2), or go to the main menu (3)? '))
-		
-		if search_choice == 2:
-			searching = False
-			selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
-
-			reviews_results = ReviewsRequest(movie_id=movies[selected_movie]['id'], page_limit=50).make_request()
+		while searching:
+			search_query = raw_input("What do you want to search for? ")
+			search_results = SearchRequest(search_query).make_request()
 
 			print divider('-', term)
-			for review in reviews_results['reviews']:
-				review_text = center_text(review['date'], term) + '\n'
-				review_text += center_text(review['critic'] + ' - ' + review['publication'], term) + '\n'
-				review_text += center_text(review['quote'], term) + '\n'
-				if review['links']:
-					review_text += center_text(review['links']['review'], term)
+			print term.blue_bold('Search Results (By Relevance):')
 
-				if review['freshness'] == 'fresh':
-					print term.green(review_text)
+			movies = [i for i in search_results['movies'] if i['ratings']['critics_score'] != -1]
+			# sorted_by_year = sorted(movies, key=lambda dic: dic['year'], reverse=True)
+
+			for i, movie in enumerate(movies):
+				if movie['ratings']['critics_score'] < 60:
+					print term.red('%s. %s: %s%% (%s)' % (i + 1, movie['title'], movie['ratings']['critics_score'], movie['year']))
 				else:
-					print term.red(review_text)
+					print term.green('%s. %s: %s%% (%s)' % (i + 1, movie['title'], movie['ratings']['critics_score'], movie['year']))
+
+			search_choice = int(raw_input('Do you want to keep searching (1), get more info on a movie (2), or go to the main menu (3)? '))
+			
+			if search_choice == 2:
+				searching = False
+				selected_movie = int(raw_input("Which movie do you want more info on? ")) - 1
+
+				reviews_results = ReviewsRequest(movie_id=movies[selected_movie]['id'], page_limit=50).make_request()
 
 				print divider('-', term)
+				for review in reviews_results['reviews']:
+					review_text = center_text(review['date'], term) + '\n'
+					review_text += center_text(review['critic'] + ' - ' + review['publication'], term) + '\n'
+					review_text += center_text(review['quote'], term) + '\n'
+					if review['links']:
+						review_text += center_text(review['links']['review'], term)
 
-		if search_choice == 3:
-			searching = False
+					if review['freshness'] == 'fresh':
+						print term.green(review_text)
+					else:
+						print term.red(review_text)
 
-def get_box_office():
-	"""Returns the box office data in a nice format."""
+					print divider('-', term)
 
-	box_office_data = BoxOfficeRequest(limit=20).make_request()
-	print divider('-', term)
-	for movie in box_office_data['movies']:
-		movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
-		movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
-		movie_text += center_text('Synopsis', term)
-		movie_text += center_text(movie['synopsis'], term)
-		
-		if movie['ratings']['critics_score'] >= 60:
-			print term.green(movie_text)
-		else:
-			print term.red(movie_text)
+			if search_choice == 3:
+				searching = False
+
+	def get_box_office(self):
+		"""Returns the box office data in a nice format."""
+
+		box_office_data = BoxOfficeRequest(limit=20).make_request()
 		print divider('-', term)
+		for movie in box_office_data['movies']:
+			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
+			movie_text += center_text('Synopsis', term)
+			movie_text += center_text(movie['synopsis'], term)
+			
+			if movie['ratings']['critics_score'] >= 60:
+				print term.green(movie_text)
+			else:
+				print term.red(movie_text)
+			print divider('-', term)
 
-def get_in_theaters():
-	"""Returns the in theaters data in a nice format."""
+	def get_in_theaters(self):
+		"""Returns the in theaters data in a nice format."""
 
-	in_theaters_data = InTheatersRequest(page_limit=20).make_request()
-	print divider('-', term)
-	for movie in in_theaters_data['movies']:
-		movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
-		movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
-		movie_text += center_text('Synopsis', term)
-		movie_text += center_text(movie['synopsis'], term)
-		
-		if movie['ratings']['critics_score'] >= 60:
-			print term.green(movie_text)
-		else:
-			print term.red(movie_text)
+		in_theaters_data = InTheatersRequest(page_limit=20).make_request()
 		print divider('-', term)
+		for movie in in_theaters_data['movies']:
+			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
+			movie_text += center_text('Synopsis', term)
+			movie_text += center_text(movie['synopsis'], term)
+			
+			if movie['ratings']['critics_score'] >= 60:
+				print term.green(movie_text)
+			else:
+				print term.red(movie_text)
+			print divider('-', term)
 
-def get_opening():
-	"""Returns the opening movies data in a nice format."""
+	def get_opening(self):
+		"""Returns the opening movies data in a nice format."""
 
-	opening_data = OpeningMoviesRequest(limit=20).make_request()
-	print divider('-', term)
-	for movie in opening_data['movies']:
-		movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
-		movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
-		movie_text += center_text('Synopsis', term)
-		movie_text += center_text(movie['synopsis'], term)
-
-		if movie['ratings']['critics_score'] >= 60:
-			print term.green(movie_text)
-		else:
-			print term.red(movie_text)
+		opening_data = OpeningMoviesRequest(limit=20).make_request()
 		print divider('-', term)
+		for movie in opening_data['movies']:
+			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
+			movie_text += center_text('Synopsis', term)
+			movie_text += center_text(movie['synopsis'], term)
 
-def get_upcoming():
-	"""Returns the upcoming movies data in a nice format."""
+			if movie['ratings']['critics_score'] >= 60:
+				print term.green(movie_text)
+			else:
+				print term.red(movie_text)
+			print divider('-', term)
 
-	upcoming_data = UpcomingMoviesRequest(page_limit=20).make_request()
-	print divider('-', term)
-	for movie in upcoming_data['movies']:
-		movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
-		movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
-		movie_text += center_text('Synopsis', term)
-		movie_text += center_text(movie['synopsis'], term)
+	def get_upcoming(self):
+		"""Returns the upcoming movies data in a nice format."""
 
-		if movie['ratings']['critics_score'] >= 60:
-			print term.green(movie_text)
-		else:
-			print term.red(movie_text)
+		upcoming_data = UpcomingMoviesRequest(page_limit=20).make_request()
 		print divider('-', term)
+		for movie in upcoming_data['movies']:
+			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
+			movie_text += center_text('Synopsis', term)
+			movie_text += center_text(movie['synopsis'], term)
+
+			if movie['ratings']['critics_score'] >= 60:
+				print term.green(movie_text)
+			else:
+				print term.red(movie_text)
+			print divider('-', term)
 
 MENU_FUNCTIONS = {
-	1: movie_search,
-	2: get_box_office,
-	3: get_in_theaters,
-	4: get_opening,
-	5: get_upcoming
+	1: MenuAction().movie_search,
+	2: MenuAction().get_box_office,
+	3: MenuAction().get_in_theaters,
+	4: MenuAction().get_opening,
+	5: MenuAction().get_upcoming
 }
 
 exit = False
@@ -139,5 +144,5 @@ while not exit:
 	if user_choice == 6:
 		exit = True
 	else:
-		MENU_FUNCTIONS[user_choice]()
+		action = MENU_FUNCTIONS[user_choice]()
 		print divider('-', term)
