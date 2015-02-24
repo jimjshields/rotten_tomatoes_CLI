@@ -21,3 +21,8 @@ def divider(char, term):
 
 	width = term.width
 	return char * width
+
+def check_for_reviews(rating):
+	"""Returns 'No reviews yet.' for a movie with no reviews."""
+	
+	return 'No reviews yet.' if rating == '-1' else rating
