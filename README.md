@@ -8,13 +8,18 @@ Setup:
 3. Put the RT API Key in your OS Environment
 	* E.g., in your .bashrc:
 	
+
 	```shell
 	export RT_API_KEY=[api_key]
 	```
 4. Use the CLI in your terminal!
 ```python
-python rtClI.py
+python rtCLI.py
 ```
+
+![Main Menu](/1.png)
+![Search](/2.png)
+![Movie Reviews](/3.png)
 
 
 To-Do:
