@@ -1,6 +1,6 @@
 from blessings import Terminal
 from classes import SearchRequest, ReviewsRequest, BoxOfficeRequest, InTheatersRequest, OpeningMoviesRequest, UpcomingMoviesRequest
-from formatting import center_text, divider
+from formatting import center_text, divider, check_for_reviews
 
 term = Terminal()
 
@@ -62,7 +62,7 @@ class MenuAction(object):
 		box_office_data = BoxOfficeRequest(limit=20).make_request()
 		print divider('-', term)
 		for movie in box_office_data['movies']:
-			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text = center_text('%s - %s - %s - %s minutes' % (movie['title'], check_for_reviews(movie['ratings']['critics_score']), movie['mpaa_rating'], movie['runtime']), term) + '\n'
 			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
 			movie_text += center_text('Synopsis', term)
 			movie_text += center_text(movie['synopsis'], term)
@@ -79,7 +79,7 @@ class MenuAction(object):
 		in_theaters_data = InTheatersRequest(page_limit=20).make_request()
 		print divider('-', term)
 		for movie in in_theaters_data['movies']:
-			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text = center_text('%s - %s - %s - %s minutes' % (movie['title'], check_for_reviews(movie['ratings']['critics_score']), movie['mpaa_rating'], movie['runtime']), term) + '\n'
 			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
 			movie_text += center_text('Synopsis', term)
 			movie_text += center_text(movie['synopsis'], term)
@@ -96,7 +96,7 @@ class MenuAction(object):
 		opening_data = OpeningMoviesRequest(limit=20).make_request()
 		print divider('-', term)
 		for movie in opening_data['movies']:
-			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text = center_text('%s - %s - %s - %s minutes' % (movie['title'], check_for_reviews(movie['ratings']['critics_score']), movie['mpaa_rating'], movie['runtime']), term) + '\n'
 			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
 			movie_text += center_text('Synopsis', term)
 			movie_text += center_text(movie['synopsis'], term)
@@ -113,7 +113,7 @@ class MenuAction(object):
 		upcoming_data = UpcomingMoviesRequest(page_limit=20).make_request()
 		print divider('-', term)
 		for movie in upcoming_data['movies']:
-			movie_text = center_text('%s - %s%% - %s - %s minutes' % (movie['title'], movie['ratings']['critics_score'], movie['mpaa_rating'], movie['runtime']), term) + '\n'
+			movie_text = center_text('%s - %s - %s - %s minutes' % (movie['title'], check_for_reviews(movie['ratings']['critics_score']), movie['mpaa_rating'], movie['runtime']), term) + '\n'
 			movie_text += center_text(', '.join([i['name'] for i in movie['abridged_cast']]), term) + '\n'
 			movie_text += center_text('Synopsis', term)
 			movie_text += center_text(movie['synopsis'], term)
