@@ -1,4 +1,6 @@
-import requests
+import requests, os
+
+RT_API_KEY = os.environ['RT_API_KEY']
 
 ### Request Classes ###
 
@@ -17,13 +19,11 @@ class APIRequest(object):
 		   If given a query (e.g., a search), can insert that as well.
 		   If given the full endpoint (e.g., when getting a set of reviews
 		   for a movie directly from the API), you can pass the full endpoint."""
-		
-		api_key = 'zyduzhcjdgzkzc3dmas2uph6'
 
 		if full_endpoint:
-			return '%s?&apikey=%s' % (full_endpoint, api_key)
+			return '%s?&apikey=%s' % (full_endpoint, RT_API_KEY)
 		else:
-			return 'http://api.rottentomatoes.com/api/public/v1.0/%s%s&apikey=%s' % (endpoint_str, query, api_key)
+			return 'http://api.rottentomatoes.com/api/public/v1.0/%s%s&apikey=%s' % (endpoint_str, query, RT_API_KEY)
 
 	def make_request(self):
 		"""Makes a request to a given endpoint and returns a parsed JSON."""

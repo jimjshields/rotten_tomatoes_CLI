@@ -5,12 +5,13 @@ def center_text(string, term):
 
 	width = term.width
 	if len(string) > width:
-		first_line = string[:width]
-		second_line = string[width:]
-		padding = ((width - len(second_line)) / 2) * ' '
-		second_line = padding + second_line + padding
+		last_line_start = len(string) - (len(string) % width)
+		last_line = string[last_line_start:]
+		first_lines = string[:last_line_start]
+		padding = ((width - len(last_line)) / 2) * ' '
+		last_line = padding + last_line + padding
 
-		return first_line + '\n' + second_line
+		return first_lines + '\n' + last_line
 
 	padding =  ((width - len(string)) / 2) * ' '
 	return padding + string + padding
@@ -20,3 +21,8 @@ def divider(char, term):
 
 	width = term.width
 	return char * width
+
+def check_for_reviews(rating):
+	"""Returns 'No reviews yet.' for a movie with no reviews."""
+	
+	return 'No reviews yet.' if rating == -1 else '{0}%'.format(rating)
