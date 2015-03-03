@@ -1,13 +1,14 @@
 # Rotten Tomatoes CLI
 A simple command line interface for the Rotten Tomatoes API.
 
-Setup:
+###Setup:
 
 1. Install through pip
 2. [Get a Rotten Tomatoes API Key](http://developer.rottentomatoes.com/)
 3. Put the RT API Key in your OS Environment
-	* E.g., in your .bashrc:
 	
+	E.g., in your .bashrc:
+
 
 	```shell
 	export RT_API_KEY=[api_key]
@@ -17,12 +18,19 @@ Setup:
 python rtCLI.py
 ```
 
+###Example usage:
+
+Main Menu:
 ![Main Menu](/images/1.png)
+
+Search for a Movie:
 ![Search](/images/2.png)
+
+Get Movie Reviews:
 ![Movie Reviews](/images/3.png)
 
-
-To-Do:
+___
+###To-Do:
   1. ~~[Figure out what data I have access to](https://github.com/jimjshields/rotten_tomatoes_CLI/wiki/Rotten-Tomatoes-Data)~~
   2. Design best way to organize it (put classes in a module?)
   3. ~~[Refactor code to be OO - classes for each type of request?](https://github.com/jimjshields/rotten_tomatoes_CLI/commit/29477096be44a7a239e2da3a3ebd1a36b6dec661)~~
