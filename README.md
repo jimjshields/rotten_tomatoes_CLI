@@ -20,13 +20,13 @@ python rtCLI.py
 
 ###Example usage:
 
-Main Menu:
+####Main Menu:
 ![Main Menu](/images/1.png)
 
-Search for a Movie:
+####Search for a Movie:
 ![Search](/images/2.png)
 
-Get Movie Reviews:
+###Get Movie Reviews:
 ![Movie Reviews](/images/3.png)
 
 ___
