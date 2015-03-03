@@ -6,7 +6,8 @@ Setup:
 1. Install through pip
 2. [Get a Rotten Tomatoes API Key](http://developer.rottentomatoes.com/)
 3. Put the RT API Key in your OS Environment
-	E.g., in your .bashrc:
+	* E.g., in your .bashrc:
+	
 	```shell
 	export RT_API_KEY=[api_key]
 	```
