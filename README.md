@@ -17,9 +17,9 @@ Setup:
 python rtCLI.py
 ```
 
-![Main Menu](/1.png)
-![Search](/2.png)
-![Movie Reviews](/3.png)
+![Main Menu](/images/1.png)
+![Search](/images/2.png)
+![Movie Reviews](/images/3.png)
 
 
 To-Do:
